@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#030304">
+<meta name="color-scheme" content="dark">
+<title>Nurbolat</title>
+<meta name="description" content="Nurbolat — Telegram, WhatsApp, Instagram">
+<meta property="og:title" content="Nurbolat">
+<meta property="og:description" content="Telegram · WhatsApp · Instagram">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23030304'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500&family=Onest:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#030304;
+  --fg:#f4f5f7;
+  --muted:rgba(244,245,247,.52);
+  --edge:rgba(255,255,255,.13);
+  --tg:#2aa3e6; --wa:#25d366; --ig1:#f58529; --ig2:#dd2a7b; --ig3:#8134af;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{height:100%;background:var(--bg)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--fg);font-family:var(--body);overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;overscroll-behavior:none}
+
+/* ---------- background: only transform/opacity animate, no live blur ---------- */
+.scene{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;contain:strict;animation:fadeIn 1.8s var(--ease) backwards}
+.blob{position:absolute;border-radius:50%;will-change:transform;backface-visibility:hidden}
+.b1{width:70vmax;height:70vmax;top:-30vmax;left:-26vmax;background:radial-gradient(closest-side,rgba(42,163,230,.42),rgba(42,163,230,.12) 55%,transparent);animation:drift1 22s ease-in-out infinite alternate}
+.b2{width:70vmax;height:70vmax;bottom:-34vmax;right:-28vmax;background:radial-gradient(closest-side,rgba(37,211,102,.30),rgba(37,211,102,.08) 55%,transparent);animation:drift2 26s ease-in-out infinite alternate}
+.b3{width:54vmax;height:54vmax;top:22%;left:30%;background:radial-gradient(closest-side,rgba(221,42,123,.34),rgba(221,42,123,.08) 55%,transparent);animation:drift3 19s ease-in-out infinite alternate}
+.b4{width:46vmax;height:46vmax;top:55%;left:-16vmax;background:radial-gradient(closest-side,rgba(129,52,175,.38),rgba(129,52,175,.08) 55%,transparent);animation:drift4 24s ease-in-out infinite alternate}
+.shade{position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 45%,rgba(3,3,4,.15),rgba(3,3,4,.82))}
+.spot{position:absolute;left:0;top:0;width:640px;height:640px;margin:-320px 0 0 -320px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,255,255,.075),transparent);will-change:transform;opacity:0;transition:opacity .8s}
+.spot.on{opacity:1}
+#dust{position:absolute;inset:0;width:100%;height:100%}
+.grain{position:absolute;inset:0;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+@keyframes fadeIn{from{opacity:0}}
+@keyframes drift1{to{transform:translate3d(18vmax,14vmax,0) scale(1.12)}}
+@keyframes drift2{to{transform:translate3d(-16vmax,-12vmax,0) scale(1.15)}}
+@keyframes drift3{from{transform:translate3d(-6vmax,-4vmax,0) scale(.9)}to{transform:translate3d(-24vmax,-20vmax,0) scale(1.12)}}
+@keyframes drift4{to{transform:translate3d(22vmax,-18vmax,0) scale(1.2)}}
+
+/* ---------- content ---------- */
+main{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(28px,6vh,48px);
+  padding-inline:16px;padding-block:calc(40px + env(safe-area-inset-top,0px)) calc(40px + env(safe-area-inset-bottom,0px))}
+
+.name{margin:0;font-family:var(--display);font-weight:500;font-size:clamp(30px,9vw,64px);letter-spacing:.14em;line-height:1.1;text-transform:uppercase;
+  display:flex;padding-left:.14em;perspective:600px;white-space:nowrap}
+.name span{display:inline-block;
+  background:linear-gradient(100deg,#8a8d96 0%,#fff 30%,#fff 45%,#8a8d96 60%,#8a8d96 100%);background-size:300% 100%;background-position:0 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  animation:letterIn 1.2s var(--ease) backwards, shimmer 5s ease-in-out infinite;
+  animation-delay:calc(var(--i) * 70ms + .2s), calc(var(--i) * 80ms + 2.2s)}
+@keyframes letterIn{from{opacity:0;transform:translate3d(0,.55em,0) rotateX(-70deg)}}
+@keyframes shimmer{0%{background-position:100% 0}60%,100%{background-position:0 0}}
+
+.rule{position:relative;width:min(220px,50vw);height:1px;margin-top:-14px;overflow:hidden;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:ruleIn 1.2s var(--ease) .9s backwards}
+.rule::after{content:"";position:absolute;top:0;left:0;width:30%;height:100%;background:linear-gradient(90deg,transparent,#fff,transparent);
+  transform:translate3d(-100%,0,0);animation:runner 3.6s ease-in-out 2.3s infinite}
+@keyframes ruleIn{from{transform:scaleX(0);opacity:0}}
+@keyframes runner{to{transform:translate3d(340%,0,0)}}
+
+.links{display:flex;flex-direction:column;gap:14px;width:min(360px,100%);list-style:none;margin:0;padding:0}
+.links li{animation:rise 1s var(--ease) backwards;animation-delay:calc(var(--i) * 110ms + .95s)}
+@keyframes rise{from{opacity:0;transform:translate3d(0,30px,0) scale(.95)}}
+
+/* ---------- liquid glass button ---------- */
+.glass{--mx:50%;--my:50%;--rx:0deg;--ry:0deg;--c:#fff;
+  appearance:none;border:0;font:inherit;cursor:pointer;width:100%;text-align:left;
+  position:relative;display:flex;align-items:center;gap:16px;padding:12px 18px 12px 12px;border-radius:26px;color:var(--fg);isolation:isolate;overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,.11),rgba(255,255,255,.03) 45%,rgba(255,255,255,.07));
+  -webkit-backdrop-filter:blur(16px) saturate(170%);backdrop-filter:blur(16px) saturate(170%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(255,255,255,.05),inset 0 0 0 1px var(--edge),inset 0 10px 24px -14px rgba(255,255,255,.25),0 18px 40px -18px rgba(0,0,0,.9);
+  transform:perspective(700px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.glass.tg{--c:var(--tg)} .glass.wa{--c:var(--wa)} .glass.ig{--c:var(--ig2)}
+.glass::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;opacity:0;transition:opacity .4s;
+  background:radial-gradient(150px circle at var(--mx) var(--my),rgba(255,255,255,.22),transparent 65%),
+             radial-gradient(260px circle at var(--mx) var(--my),color-mix(in srgb,var(--c) 38%,transparent),transparent 70%)}
+.glass::after{content:"";position:absolute;top:0;left:0;height:100%;width:40%;z-index:-1;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.13),transparent);
+  transform:translate3d(-120%,0,0) skewX(-20deg);animation:sweep 5.5s var(--ease) infinite;animation-delay:calc(var(--i) * .5s + 2.4s)}
+@keyframes sweep{28%,100%{transform:translate3d(320%,0,0) skewX(-20deg)}}
+.glass.lit::before{opacity:1}
+.glass:active,.glass.press{transition-duration:.15s;transform:perspective(700px) scale(.965)}
+.glass:focus-visible{outline:2px solid color-mix(in srgb,var(--c) 70%,#fff);outline-offset:3px}
+
+.icon{position:relative;flex:none;width:52px;height:52px;display:grid;place-items:center;border-radius:18px;overflow:hidden;
+  background:rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 1px rgba(255,255,255,.08)}
+/* two soft blobs spinning against each other = liquid feel, compositor-only */
+.icon::before,.icon::after{content:"";position:absolute;width:120%;height:120%;left:-10%;top:-10%;will-change:transform;
+  border-radius:42% 58% 63% 37% / 43% 38% 62% 57%;background:radial-gradient(closest-side,var(--c),transparent);opacity:.7}
+.icon::before{animation:spin 9s linear infinite}
+.icon::after{border-radius:61% 39% 35% 65% / 58% 60% 40% 42%;opacity:.5;animation:spin 13s linear infinite reverse;transform-origin:45% 55%}
+.ig .icon::before{background:radial-gradient(closest-side at 35% 70%,var(--ig1),transparent),radial-gradient(closest-side,var(--ig2),transparent)}
+.ig .icon::after{background:radial-gradient(closest-side,var(--ig3),transparent)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.icon svg{position:relative;z-index:1;width:26px;height:26px;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:transform .6s var(--spring)}
+
+.text{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.label{font-weight:600;font-size:17px;letter-spacing:.01em}
+.hint{font-size:13px;color:var(--muted);transition:color .4s}
+.arrow{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);
+  transition:transform .5s var(--spring),background-color .4s}
+.arrow svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* hover only on real mouse — no sticky hover on phones */
+@media (hover:hover) and (pointer:fine){
+  .glass:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 1px rgba(255,255,255,.2),inset 0 10px 24px -12px rgba(255,255,255,.3),0 22px 50px -16px color-mix(in srgb,var(--c) 55%,transparent)}
+  .glass:hover .icon svg{transform:scale(1.14) rotate(-6deg)}
+  .glass:hover .hint{color:rgba(244,245,247,.85)}
+  .glass:hover .arrow{transform:translateX(4px) rotate(-45deg);background-color:color-mix(in srgb,var(--c) 45%,transparent)}
+}
+.glass.press .arrow{transform:translateX(4px) rotate(-45deg);background-color:color-mix(in srgb,var(--c) 45%,transparent)}
+
+.ripple{position:absolute;left:0;top:0;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;pointer-events:none;z-index:-1;
+  background:radial-gradient(closest-side,rgba(255,255,255,.5),color-mix(in srgb,var(--c) 45%,transparent) 60%,transparent);
+  animation:ripple .75s var(--ease) forwards}
+@keyframes ripple{from{transform:translate3d(var(--x),var(--y),0) scale(0);opacity:1}to{transform:translate3d(var(--x),var(--y),0) scale(34);opacity:0}}
+
+/* page fade on leave */
+body.leaving main{transition:opacity .35s ease,transform .35s ease;opacity:0;transform:scale(.98)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div class="scene" aria-hidden="true">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+  <div class="shade"></div>
+  <canvas id="dust"></canvas>
+  <div class="spot" id="spot"></div>
+  <div class="grain"></div>
+</div>
+
+<main>
+  <h1 class="name" id="name" aria-label="Nurbolat">Nurbolat</h1>
+  <div class="rule" aria-hidden="true"></div>
+
+  <ul class="links">
+    <li style="--i:0">
+      <button class="glass tg" style="--i:0" data-k="tg" type="button">
+        <span class="icon"><svg viewBox="0 0 24 24"><path d="M21.2 3.6 3 10.6c-1 .4-.9 1.7.1 2l4.3 1.3 1.7 5.3c.3.9 1.4 1.1 2 .4l2.4-2.4 4.6 3.4c.8.6 1.9.2 2.1-.8L22.9 5.2c.3-1.1-.8-2-1.7-1.6Z"/><path d="m7.4 13.9 10.4-6.6-7.6 8.1"/></svg></span>
+        <span class="text"><span class="label">Telegram</span><span class="hint">Write me</span></span>
+        <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </button>
+    </li>
+    <li style="--i:1">
+      <button class="glass wa" style="--i:1" data-k="wa" type="button">
+        <span class="icon"><svg viewBox="0 0 24 24"><path d="M3.8 20.2 5 16.1A8.6 8.6 0 1 1 8.2 19Z"/><path d="M9.3 8.3c.2-.4.5-.5.8-.5h.5c.2 0 .4.1.5.4l.6 1.4c.1.2 0 .5-.1.7l-.5.6c-.1.1-.1.3 0 .5.6 1 1.4 1.8 2.4 2.4.2.1.4.1.5 0l.6-.5c.2-.1.4-.2.6-.1l1.4.6c.3.1.4.3.4.5v.5c0 .3-.2.6-.5.8-.7.3-1.5.4-2.3.1-2.1-.8-3.7-2.4-4.5-4.5-.3-.8-.2-1.6.1-2.3Z"/></svg></span>
+        <span class="text"><span class="label">WhatsApp</span><span class="hint">Chat now</span></span>
+        <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </button>
+    </li>
+    <li style="--i:2">
+      <button class="glass ig" style="--i:2" data-k="ig" type="button">
+        <span class="icon"><svg viewBox="0 0 24 24"><path d="M3 9a2.5 2.5 0 0 1 2.5-2.5h1.7l1.4-2h6.8l1.4 2h1.7A2.5 2.5 0 0 1 21 9v8.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5Z"/><circle cx="12" cy="13" r="3.8"/></svg></span>
+        <span class="text"><span class="label">Instagram</span><span class="hint">Follow</span></span>
+        <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </button>
+    </li>
+  </ul>
+</main>
+
+<script>
+(() => {
+  // links are not in the markup, so the browser never shows them on hover
+  const L = {
+    tg: 'https://t.me/nurrrvsx',
+    wa: 'https://wa.me/77471541449',
+    ig: 'https://www.instagram.com/nuurrrr_a/'
+  };
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // restore page if user comes back with the Back button
+  addEventListener('pageshow', () => document.body.classList.remove('leaving'));
+
+  // split name into letters
+  const nameEl = document.getElementById('name');
+  const word = nameEl.textContent.trim();
+  nameEl.textContent = '';
+  [...word].forEach((ch, i) => {
+    const s = document.createElement('span');
+    s.textContent = ch; s.style.setProperty('--i', i); s.setAttribute('aria-hidden', 'true');
+    nameEl.appendChild(s);
+  });
+
+  // spotlight follows pointer (moved with transform, not CSS vars on :root)
+  const spot = document.getElementById('spot');
+  let tx = innerWidth / 2, ty = innerHeight * .4, cx = tx, cy = ty, moved = false;
+  if (fine) {
+    addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; if (!moved) { moved = true; spot.classList.add('on'); } }, { passive: true });
+  }
+
+  // buttons
+  document.querySelectorAll('.glass').forEach(el => {
+    let rect = null, going = false;
+    const pos = e => {
+      rect = rect || el.getBoundingClientRect();
+      const x = e.clientX - rect.left, y = e.clientY - rect.top;
+      el.style.setProperty('--mx', x + 'px');
+      el.style.setProperty('--my', y + 'px');
+      return [x, y];
+    };
+    if (fine && !reduce) {
+      el.addEventListener('pointerenter', () => { rect = el.getBoundingClientRect(); el.classList.add('lit'); });
+      el.addEventListener('pointermove', e => {
+        const [x, y] = pos(e);
+        el.style.setProperty('--ry', ((x / rect.width) - .5) * 8 + 'deg');
+        el.style.setProperty('--rx', (.5 - (y / rect.height)) * 8 + 'deg');
+      }, { passive: true });
+      el.addEventListener('pointerleave', () => {
+        rect = null; el.classList.remove('lit');
+        el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg');
+      });
+    }
+    el.addEventListener('pointerdown', e => {
+      rect = el.getBoundingClientRect();
+      const [x, y] = pos(e);
+      el.classList.add('lit');
+      if (!reduce) {
+        const rp = document.createElement('span');
+        rp.className = 'ripple';
+        rp.style.setProperty('--x', x + 'px');
+        rp.style.setProperty('--y', y + 'px');
+        el.appendChild(rp);
+        rp.addEventListener('animationend', () => rp.remove(), { once: true });
+      }
+    });
+    const unlit = () => { if (!fine) setTimeout(() => el.classList.remove('lit'), 350); };
+    el.addEventListener('pointerup', unlit);
+    el.addEventListener('pointercancel', () => el.classList.remove('lit'));
+
+    el.addEventListener('click', () => {
+      if (going) return;
+      going = true;
+      el.classList.add('press');
+      const url = L[el.dataset.k];
+      setTimeout(() => {
+        document.body.classList.add('leaving');
+        location.href = url;
+      }, reduce ? 0 : 220);
+      setTimeout(() => { going = false; el.classList.remove('press', 'lit'); document.body.classList.remove('leaving'); }, 1800);
+    });
+  });
+
+  // dust particles
+  const cv = document.getElementById('dust');
+  const ctx = cv.getContext('2d', { alpha: true });
+  let W = 0, H = 0, parts = [];
+  const resize = () => {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const nw = innerWidth, nh = innerHeight;
+    // ignore tiny height changes from the mobile address bar so particles don't reset
+    if (Math.abs(nw - W) < 2 && Math.abs(nh - H) < 120 && parts.length) return;
+    W = nw; H = nh;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(60, (W * H) / 18000));
+    parts = Array.from({ length: n }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.3 + .35,
+      vx: (Math.random() - .5) * .12, vy: -Math.random() * .22 - .05,
+      a: Math.random() * .5 + .15, t: Math.random() * 6.28
+    }));
+  };
+  resize();
+  addEventListener('resize', resize, { passive: true });
+
+  let running = !document.hidden, last = performance.now();
+  document.addEventListener('visibilitychange', () => {
+    running = !document.hidden;
+    if (running) { last = performance.now(); requestAnimationFrame(frame); }
+  });
+
+  function frame(now) {
+    if (!running) return;
+    // frame-rate independent: same speed at 60Hz and 120Hz
+    const dt = Math.min((now - last) / 16.67, 3); last = now;
+
+    if (moved) {
+      cx += (tx - cx) * Math.min(.1 * dt, 1);
+      cy += (ty - cy) * Math.min(.1 * dt, 1);
+      spot.style.transform = `translate3d(${cx}px,${cy}px,0)`;
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff';
+    for (const p of parts) {
+      if (!reduce) {
+        p.t += .015 * dt;
+        p.x += (p.vx + Math.sin(p.t) * .12) * dt;
+        p.y += p.vy * dt;
+        if (moved) {
+          const dx = p.x - cx, dy = p.y - cy, d2 = dx * dx + dy * dy;
+          if (d2 < 14000 && d2 > 1) { const d = Math.sqrt(d2), f = (1 - d2 / 14000) * .6 * dt; p.x += dx / d * f; p.y += dy / d * f; }
+        }
+        if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+        if (p.x < -10) p.x = W + 10; else if (p.x > W + 10) p.x = -10;
+      }
+      ctx.globalAlpha = p.a * (.6 + .4 * Math.sin(p.t * 2));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
